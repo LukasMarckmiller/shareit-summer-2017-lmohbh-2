@@ -9,4 +9,21 @@ package edu.hm.fachklassen;
 * @Author Sebastian Heunke, heunke@hm.edu
 */
 public class Copy {
+    private final Medium medium;
+    private final String owner;
+
+    Copy(String owner, Medium medium){
+        if (owner == null || medium == null)
+            throw new IllegalArgumentException("Arguments cant be null!");
+        this.owner = owner;
+        this.medium = medium;
+    }
+
+    public Medium getMedium() {
+        return medium;
+    }
+
+    public String getOwner() {
+        return owner;
+    }
 }
