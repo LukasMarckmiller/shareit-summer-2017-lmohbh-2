@@ -13,6 +13,9 @@ import javax.ws.rs.core.Response;
  * Intel Core i5-6600K CPU/3.50GHz overclocked 4.1GHz, 4 cores, 16000 MByte RAM)
  * with IntelliJ IDEA 2017.1.1
  *
+ * test: Chrome Plugin Postman for POST and PUT otherwise just write localhost:8082/shareit/media/books or for Discs localhost:8082/shareit/media/discs
+  * to get a certain Book or Disc write localhost:8082/shareit/media/books/1234      with 1234 is the isbn number
+  *
  */
 @Path("/media/books")
 public class BookResource {
