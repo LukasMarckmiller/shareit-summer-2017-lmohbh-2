@@ -66,7 +66,7 @@ public class BookResource {
     @Produces(MediaType.APPLICATION_JSON)
     public Response getBooks() {
         return Response
-                .status(Response.Status.ACCEPTED)
+                .status(Response.Status.OK)
                 .entity(getBookService().getBooks())
                 .build();
     }
@@ -78,7 +78,7 @@ public class BookResource {
     {
         Book book = getBookService().getBook(isbn);
         return Response
-                .status(book == null ? Response.Status.BAD_REQUEST : Response.Status.ACCEPTED)
+                .status(book == null ? Response.Status.BAD_REQUEST : Response.Status.OK)
                 .entity(book)
                 .build();
     }

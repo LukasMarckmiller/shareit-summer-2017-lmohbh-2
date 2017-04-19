@@ -43,7 +43,7 @@ public class BookServiceImpl implements BookService{
     @Override
     public Book getBook(String isbn) {
         //Set doesnt contain dublicates so findFirst always returns null or the proper object
-        Optional<Book> possibleBook = booksSet.stream().filter(b -> b.getIsbn() == isbn).findFirst();
+        Optional<Book> possibleBook = booksSet.stream().filter(b -> b.getIsbn().equals(isbn)).findFirst();
         if (possibleBook.isPresent())
             return possibleBook.get();
         else

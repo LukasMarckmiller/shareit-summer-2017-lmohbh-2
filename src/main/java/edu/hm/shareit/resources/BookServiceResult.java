@@ -10,7 +10,7 @@ enum BookServiceResult {
     MissingParamAuthor("Missing Author",Response.Status.BAD_REQUEST),
     MissingParamTitle("Missing Title",Response.Status.BAD_REQUEST),
     MissingParamIsbn("Missing ISBN",Response.Status.BAD_REQUEST),
-    AllRight("Accepted",Response.Status.ACCEPTED);
+    AllRight("Accepted",Response.Status.OK);
 
     private final String message;
     private final Response.Status status;
