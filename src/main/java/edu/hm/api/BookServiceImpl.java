@@ -1,23 +1,32 @@
 package edu.hm.api;
 
 import edu.hm.fachklassen.Book;
-import edu.hm.fachklassen.Medium;
-
-import javax.swing.text.html.Option;
 import java.util.HashSet;
 import java.util.Optional;
 
 /**
- * Created by Lukas on 12.04.2017.
+ * Defines Service routine for Book Objects and stores them
+ * Created by Lukas Marckmiller on 12.04.2017.
+ * @author Lukas Marckmiller, l.marckmil@hm.edu
+ * @version 1.1
  */
 public class BookServiceImpl implements BookService{
+    //has to be static because Jetty creates a new BookResource Object for each request
+    //so we need a static and persistent container
     static final HashSet<Book> booksSet = new HashSet<>();
     public BookServiceImpl() {
     }
 
+    /**
+     * Add book do data structure.
+     * @param book - A Book Object with Title,ISBN and Author
+     * @return BookServiceResult
+     */
     @Override
     public BookServiceResult addBook(Book book) {
+        //true if book already exists, dublicate handling not impelemented
         booksSet.add(book);
+        return BookServiceResult.AllRight;
     }
 
     @Override
@@ -27,6 +36,7 @@ public class BookServiceImpl implements BookService{
 
     @Override
     public Book getBook(String isbn) {
+        //Set doesnt contain dublicates so findFirst always returns null or the proper object
         Optional<Book> possibleBook = booksSet.stream().filter(b -> b.getIsbn() == isbn).findFirst();
         if (possibleBook.isPresent())
             return possibleBook.get();
@@ -37,8 +47,10 @@ public class BookServiceImpl implements BookService{
     @Override
     public BookServiceResult updateBook(Book book)
     {
-        booksSet.remove(getBook(book.getIsbn()));
-        booksSet.add(book);
-        return BookServiceResult.
+        if (booksSet.remove(getBook(book.getIsbn())))
+            booksSet.add(book);
+        else
+            return BookServiceResult.NoBookWithISBNFound;
+        return BookServiceResult.AllRight;
     }
 }

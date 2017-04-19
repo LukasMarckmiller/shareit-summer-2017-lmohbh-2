@@ -1,7 +1,5 @@
 package edu.hm.api;
 
-import com.fasterxml.jackson.annotation.JacksonAnnotation;
-import com.fasterxml.jackson.jaxrs.annotation.JacksonFeatures;
 import edu.hm.fachklassen.Book;
 import org.json.JSONObject;
 
@@ -9,8 +7,12 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-/**
- * Created by Lukas on 12.04.2017.
+/*
+ * (C) 2017, Lukas, l.marckmiller@hm.edu on 12.04.2017.
+ * Java 1.8.0_111, Windows 10 Pro 64bit
+ * Intel Core i5-6600K CPU/3.50GHz overclocked 4.1GHz, 4 cores, 16000 MByte RAM)
+ * with IntelliJ IDEA 2017.1.1
+ *
  */
 @Path("/media/books")
 public class BookResource {
@@ -76,6 +78,10 @@ public class BookResource {
     @Produces(MediaType.APPLICATION_JSON)
     public Response getBook(@PathParam("isbn") String isbn)
     {
-
+        Book book = getBookService().getBook(isbn);
+        return Response
+                .status(book == null ? Response.Status.BAD_REQUEST : Response.Status.ACCEPTED)
+                .entity(book)
+                .build();
     }
 }

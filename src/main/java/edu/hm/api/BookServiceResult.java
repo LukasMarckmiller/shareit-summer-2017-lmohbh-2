@@ -5,16 +5,10 @@ import javax.ws.rs.core.Response;
 /**
  * Created by Lukas on 12.04.2017.
  */
-public enum BookServiceResult {
-    MissingParamAuthor(Response.Status.BAD_REQUEST,"MissingAuthor");
-    AllRight(Response.Status.);
-    public String getMessage() {
-        return message;
-    }
-
-    public Response.Status getStatus() {
-        return status;
-    }
+enum BookServiceResult {
+    NoBookWithISBNFound("No Book with given ISBN found", Response.Status.BAD_REQUEST),
+    MissingParamAuthor("Missing Author",Response.Status.BAD_REQUEST),
+    AllRight("Accepted",Response.Status.ACCEPTED);
 
     private final String message;
     private final Response.Status status;
@@ -22,5 +16,14 @@ public enum BookServiceResult {
     BookServiceResult(String message, Response.Status status) {
         this.message = message;
         this.status = status;
+    }
+
+    public Response.Status getStatus() {
+        return status;
+    }
+
+    @Override
+    public String toString() {
+        return this.message;
     }
 }
