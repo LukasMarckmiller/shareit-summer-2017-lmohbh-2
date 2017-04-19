@@ -1,4 +1,4 @@
-package edu.hm.api;
+package edu.hm.shareit.resources;
 
 /**
  * Created by oliver on 12.04.17.

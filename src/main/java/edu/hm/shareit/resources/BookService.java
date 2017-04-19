@@ -1,7 +1,6 @@
-package edu.hm.api;
+package edu.hm.shareit.resources;
 
 import edu.hm.fachklassen.Book;
-import edu.hm.fachklassen.Medium;
 
 interface BookService
 {

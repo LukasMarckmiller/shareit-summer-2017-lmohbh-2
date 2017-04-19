@@ -1,4 +1,4 @@
-package edu.hm.api;
+package edu.hm.shareit.resources;
 
 import javax.ws.rs.core.Response;
 
@@ -6,8 +6,10 @@ import javax.ws.rs.core.Response;
  * Created by Lukas on 12.04.2017.
  */
 enum BookServiceResult {
-    NoBookWithISBNFound("No Book with given ISBN found", Response.Status.BAD_REQUEST),
+    NoBookWithIsbnFound("No Book with given ISBN found", Response.Status.BAD_REQUEST),
     MissingParamAuthor("Missing Author",Response.Status.BAD_REQUEST),
+    MissingParamTitle("Missing Title",Response.Status.BAD_REQUEST),
+    MissingParamIsbn("Missing ISBN",Response.Status.BAD_REQUEST),
     AllRight("Accepted",Response.Status.ACCEPTED);
 
     private final String message;

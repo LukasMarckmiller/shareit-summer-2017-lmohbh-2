@@ -1,4 +1,4 @@
-package edu.hm.api;
+package edu.hm.shareit.resources;
 
 import edu.hm.fachklassen.Book;
 import org.json.JSONObject;
@@ -17,10 +17,9 @@ import javax.ws.rs.core.Response;
 @Path("/media/books")
 public class BookResource {
 
-    private BookService bookService;
+    private final BookService bookService;
 
     public BookResource() {
-
         this.bookService = new BookServiceImpl();
     }
 
@@ -45,18 +44,17 @@ public class BookResource {
     @Consumes(MediaType.APPLICATION_JSON)
     public Response updateBook(@PathParam("isbn")String isbn, Book book)
     {
-        //isbn in uri differes from isbn in book object
-        if (book.getIsbn() != "" && !isbn.equals(book.getIsbn()))
+        //isbn in uri differs from isbn in book object
+        if (!book.getIsbn().equals("") && !isbn.equals(book.getIsbn()))
         {
             return Response.status(Response.Status.BAD_REQUEST)
                     .entity(new JSONObject().put("Message","ISBN"))
                     .build();
         }
         //no isbn in request json body
-        else if (book.getIsbn() == "")
-        {
-            book = new Book(book.getTitel(),book.getAuthor(),isbn);
-        }
+        else if (book.getIsbn().equals(""))
+              book = new Book(book.getTitel(),book.getAuthor(),isbn);
+
 
         //find and replace book object
         BookServiceResult result = bookService.updateBook(book);

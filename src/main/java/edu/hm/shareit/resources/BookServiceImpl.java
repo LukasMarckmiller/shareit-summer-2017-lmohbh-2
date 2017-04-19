@@ -1,4 +1,4 @@
-package edu.hm.api;
+package edu.hm.shareit.resources;
 
 import edu.hm.fachklassen.Book;
 import java.util.HashSet;
@@ -24,9 +24,15 @@ public class BookServiceImpl implements BookService{
      */
     @Override
     public BookServiceResult addBook(Book book) {
-        //true if book already exists, dublicate handling not impelemented
+        //if book already exists no duplicate handling implemented
+        BookServiceResult bookServiceResult;
+        bookServiceResult = book.getAuthor().equals("") ?
+                BookServiceResult.MissingParamAuthor : book.getTitel().equals("") ?
+                BookServiceResult.MissingParamTitle : book.getIsbn().equals("") ?
+                BookServiceResult.NoBookWithIsbnFound : BookServiceResult.AllRight;
+
         booksSet.add(book);
-        return BookServiceResult.AllRight;
+        return bookServiceResult;
     }
 
     @Override
@@ -50,7 +56,7 @@ public class BookServiceImpl implements BookService{
         if (booksSet.remove(getBook(book.getIsbn())))
             booksSet.add(book);
         else
-            return BookServiceResult.NoBookWithISBNFound;
+            return BookServiceResult.NoBookWithIsbnFound;
         return BookServiceResult.AllRight;
     }
 }
