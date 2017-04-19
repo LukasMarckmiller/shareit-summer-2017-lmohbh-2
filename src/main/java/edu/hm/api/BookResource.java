@@ -1,8 +1,12 @@
 package edu.hm.api;
 
+import com.fasterxml.jackson.annotation.JacksonAnnotation;
+import com.fasterxml.jackson.jaxrs.annotation.JacksonFeatures;
 import edu.hm.fachklassen.Book;
+import org.json.JSONObject;
 
 import javax.ws.rs.*;
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 /**
@@ -10,15 +14,67 @@ import javax.ws.rs.core.Response;
  */
 @Path("/media/books")
 public class BookResource {
+
+    private BookService bookService;
+
+    public BookResource() {
+
+        this.bookService = new BookServiceImpl();
+    }
+
+    private BookService getBookService() {
+        return bookService;
+    }
+
     @POST
-    @Path("{book}")
-    public Response createBooks(@PathParam("book")Book book)
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response createBook(Book book)
     {
-        return null;
+
+        BookServiceResult result = bookService.addBook(book);
+
+        return Response
+                .status(result.getStatus())
+                .build();
+    }
+
+    @PUT
+    @Path("{isbn}")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response updateBook(@PathParam("isbn")String isbn, Book book)
+    {
+        //isbn in uri differes from isbn in book object
+        if (book.getIsbn() != "" && !isbn.equals(book.getIsbn()))
+        {
+            return Response.status(Response.Status.BAD_REQUEST)
+                    .entity(new JSONObject().put("Message","ISBN"))
+                    .build();
+        }
+        //no isbn in request json body
+        else if (book.getIsbn() == "")
+        {
+            book = new Book(book.getTitel(),book.getAuthor(),isbn);
+        }
+
+        //find and replace book object
+        BookServiceResult result = bookService.updateBook(book);
+        return Response.status(result.getStatus())
+                .build();
     }
 
     @GET
-    public Response getBooks()
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getBooks() {
+        return Response
+                .status(Response.Status.ACCEPTED)
+                .entity(getBookService().getBooks())
+                .build();
+    }
+
+    @GET
+    @Path("{isbn}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getBook(@PathParam("isbn") String isbn)
     {
 
     }

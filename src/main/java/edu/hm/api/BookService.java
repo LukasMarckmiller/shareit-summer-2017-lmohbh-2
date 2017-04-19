@@ -7,7 +7,9 @@ interface BookService
 {
     BookServiceResult addBook(Book book);
 
-    Medium[] getBooks();
+    Book[] getBooks();
+
+    Book getBook(String isbn);
 
     BookServiceResult updateBook(Book book);
 }
