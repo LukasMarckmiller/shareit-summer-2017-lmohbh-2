@@ -29,7 +29,7 @@ public class BookServiceImpl implements BookService{
         bookServiceResult = book.getAuthor().equals("") ?
                 BookServiceResult.MissingParamAuthor : book.getTitel().equals("") ?
                 BookServiceResult.MissingParamTitle : book.getIsbn().equals("") ?
-                BookServiceResult.NoBookWithIsbnFound : BookServiceResult.AllRight;
+                BookServiceResult.MissingParamIsbn : BookServiceResult.AllRight;
 
         booksSet.add(book);
         return bookServiceResult;

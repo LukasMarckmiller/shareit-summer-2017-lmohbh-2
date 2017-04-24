@@ -5,7 +5,7 @@ import javax.ws.rs.core.Response;
 /**
  * Created by Lukas on 12.04.2017.
  */
-enum BookServiceResult {
+public enum BookServiceResult {
     NoBookWithIsbnFound("No Book with given ISBN found", Response.Status.BAD_REQUEST),
     MissingParamAuthor("Missing Author",Response.Status.BAD_REQUEST),
     MissingParamTitle("Missing Title",Response.Status.BAD_REQUEST),
