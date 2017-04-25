@@ -17,7 +17,5 @@ public enum MediaServiceResultDiscs {CODE404(404,"Not Found");
         return code;
     }
 
-    public String getStatus(){
-        return status;
-    }
+    public String getStatus(){ return status; }
 }

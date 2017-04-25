@@ -1,4 +1,4 @@
-package edu.hm.shareit.resources;
+package edu.hm.api;
 
 import edu.hm.fachklassen.Disc;
 
