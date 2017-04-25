@@ -51,7 +51,7 @@ public class DiscResource
 
         if (disc.getBarcode().isEmpty())
         {
-            disc = new Disc(disc.getTitel(), barcode, disc.getFsk(), disc.getDirector());
+            disc = new Disc(disc.getTitle(), barcode, disc.getFsk(), disc.getDirector());
         }
 
         if(disc.getBarcode() != barcode)
