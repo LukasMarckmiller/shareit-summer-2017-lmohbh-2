@@ -17,8 +17,8 @@ public class Book extends Medium {
         this("", "", "");
     }
 
-    public Book(String titel, String author, String isbn) {
-        super(titel);
+    public Book(String title, String author, String isbn) {
+        super(title);
         if (author == null || isbn == null)
             throw new IllegalArgumentException("Invalid author or isbn!");
         this.author = author;
@@ -36,7 +36,7 @@ public class Book extends Medium {
 
     @Override
     public String toString(){
-        return "[" + getAuthor() + ": " + getTitel() + " (" + getIsbn() + ")]";
+        return "[" + getAuthor() + ": " + getTitle() + " (" + getIsbn() + ")]";
     }
 
     @Override

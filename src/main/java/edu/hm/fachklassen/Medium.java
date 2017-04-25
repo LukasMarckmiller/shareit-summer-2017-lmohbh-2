@@ -9,21 +9,21 @@ package edu.hm.fachklassen;
 * @Author Sebastian Heunke, heunke@hm.edu
 */
 abstract public class Medium {
-    private final String titel;
+    private final String title;
 
-    public Medium(String titel){
-        if(titel == null)
+    public Medium(String title){
+        if(title == null)
             throw new IllegalArgumentException("Invalid Titel!");
-        this.titel = titel;
+        this.title = title;
     }
 
-    public String getTitel(){
-        return titel;
+    public String getTitle(){
+        return title;
     }
 
     @Override
     public String toString(){
-        return getTitel();
+        return getTitle();
     }
 
 
@@ -36,11 +36,11 @@ abstract public class Medium {
 
         Medium medium = (Medium) o;
 
-        return titel.equals(medium.titel);
+        return title.equals(medium.title);
     }
 
     @Override
     public int hashCode() {
-        return titel.hashCode();
+        return title.hashCode();
     }
 }
