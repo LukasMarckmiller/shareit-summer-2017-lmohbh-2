@@ -32,36 +32,35 @@ public class BookResource {
 
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response createBook(Book book)
-    {
-
-        BookServiceResult result = bookService.addBook(book);
-
+    public Response createBook(Book book) {
+        final BookServiceResult result = bookService.addBook(book);
         return Response
                 .status(result.getStatus())
+                .entity(getJsonFromServiceResult(result).toString())
                 .build();
     }
 
     @PUT
     @Path("{isbn}")
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response updateBook(@PathParam("isbn")String isbn, Book book)
-    {
-        //isbn in uri differs from isbn in book object
-        if (!book.getIsbn().equals("") && !isbn.equals(book.getIsbn()))
-        {
+    public Response updateBook(@PathParam("isbn") String isbn, Book book) {
+        //isbn in uri differs from isbn in book object. I do that because updateBook only gets a book object,
+        //there's no possibility to check in service for the local var isbn because the json defined isbn is given to
+        //the service
+        if (!book.getIsbn().equals("") && !isbn.equals(book.getIsbn())) {
             return Response.status(Response.Status.BAD_REQUEST)
-                    .entity(new JSONObject().put("Message","ISBN"))
+                    .entity(new JSONObject().put("Message", "Isbn differs from isbn specified in payload."))
                     .build();
         }
         //no isbn in request json body
         else if (book.getIsbn().equals(""))
-              book = new Book(book.getTitel(),book.getAuthor(),isbn);
+            book = new Book(book.getTitle(), book.getAuthor(), isbn);
 
 
         //find and replace book object
-        BookServiceResult result = bookService.updateBook(book);
-        return Response.status(result.getStatus())
+        final BookServiceResult result = bookService.updateBook(book);
+        return Response.status(result.getStatus().getStatusCode())
+                .entity(getJsonFromServiceResult(result))
                 .build();
     }
 
@@ -77,12 +76,21 @@ public class BookResource {
     @GET
     @Path("{isbn}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getBook(@PathParam("isbn") String isbn)
-    {
-        Book book = getBookService().getBook(isbn);
+    public Response getBook(@PathParam("isbn") String isbn) {
+        final Book book = getBookService().getBook(isbn);
         return Response
                 .status(book == null ? Response.Status.BAD_REQUEST : Response.Status.OK)
-                .entity(book)
-                .build();
+                .entity(book == null ? new JSONObject()
+                        .put("Status", Response.Status.BAD_REQUEST.getStatusCode())
+                        .put("Message", "No book with given isbn found.").toString()
+                        : book
+                ).build();
+    }
+
+    private JSONObject getJsonFromServiceResult(BookServiceResult bookServiceResult) {
+        final JSONObject returnJsonObject = new JSONObject();
+        returnJsonObject.put("Status", bookServiceResult.getStatus().getStatusCode());
+        returnJsonObject.put("Message", bookServiceResult.getMessage());
+        return returnJsonObject;
     }
 }

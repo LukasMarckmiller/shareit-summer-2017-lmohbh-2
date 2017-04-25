@@ -25,13 +25,14 @@ public class BookServiceImpl implements BookService{
     @Override
     public BookServiceResult addBook(Book book) {
         //if book already exists no duplicate handling implemented
-        BookServiceResult bookServiceResult;
-        bookServiceResult = book.getAuthor().equals("") ?
-                BookServiceResult.MissingParamAuthor : book.getTitel().equals("") ?
+        BookServiceResult bookServiceResult = book.getAuthor().equals("") ?
+                BookServiceResult.MissingParamAuthor : book.getTitle().equals("") ?
                 BookServiceResult.MissingParamTitle : book.getIsbn().equals("") ?
-                BookServiceResult.MissingParamIsbn : BookServiceResult.AllRight;
+                BookServiceResult.MissingParamIsbn : booksSet.contains(getBook(book.getIsbn())) ?
+                BookServiceResult.BookWithIsbnExistsAlready : BookServiceResult.AllRight;
 
-        booksSet.add(book);
+        if (bookServiceResult == BookServiceResult.AllRight)
+            booksSet.add(book);
         return bookServiceResult;
     }
 
@@ -44,10 +45,7 @@ public class BookServiceImpl implements BookService{
     public Book getBook(String isbn) {
         //Set doesnt contain dublicates so findFirst always returns null or the proper object
         Optional<Book> possibleBook = booksSet.stream().filter(b -> b.getIsbn().equals(isbn)).findFirst();
-        if (possibleBook.isPresent())
-            return possibleBook.get();
-        else
-            return null;
+        return possibleBook.orElse(null);
     }
 
     @Override

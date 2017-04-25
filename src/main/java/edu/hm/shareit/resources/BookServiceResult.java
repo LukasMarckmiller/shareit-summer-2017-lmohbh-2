@@ -6,11 +6,12 @@ import javax.ws.rs.core.Response;
  * Created by Lukas on 12.04.2017.
  */
 public enum BookServiceResult {
-    NoBookWithIsbnFound("No Book with given ISBN found", Response.Status.BAD_REQUEST),
-    MissingParamAuthor("Missing Author",Response.Status.BAD_REQUEST),
-    MissingParamTitle("Missing Title",Response.Status.BAD_REQUEST),
-    MissingParamIsbn("Missing ISBN",Response.Status.BAD_REQUEST),
-    AllRight("Accepted",Response.Status.OK);
+    NoBookWithIsbnFound("No book with given isbn found (maybe a typo, isbn´s are pretty long).", Response.Status.BAD_REQUEST),
+    MissingParamAuthor("Missing author.", Response.Status.BAD_REQUEST),
+    MissingParamTitle("Missing title.", Response.Status.BAD_REQUEST),
+    MissingParamIsbn("Missing isbn.", Response.Status.BAD_REQUEST),
+    BookWithIsbnExistsAlready("Book with given isbn already exists, i don´t know what to do?!.", Response.Status.BAD_REQUEST),
+    AllRight("Your request was correct. Like that!", Response.Status.OK);
 
     private final String message;
     private final Response.Status status;
@@ -22,6 +23,10 @@ public enum BookServiceResult {
 
     public Response.Status getStatus() {
         return status;
+    }
+
+    public String getMessage() {
+        return message;
     }
 
     @Override
