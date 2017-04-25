@@ -1,14 +1,10 @@
-package edu.hm.tests;
+package edu.hm.shareit.resources;
 
 import edu.hm.fachklassen.Book;
-import edu.hm.shareit.resources.BookResource;
-import edu.hm.shareit.resources.BookServiceImpl;
-import edu.hm.shareit.resources.BookServiceResult;
 import org.junit.Assert;
 import org.junit.Test;
 
 import javax.ws.rs.core.Response;
-import java.util.Arrays;
 
 /*
 *ShareIt

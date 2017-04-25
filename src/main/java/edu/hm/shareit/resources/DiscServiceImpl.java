@@ -26,7 +26,7 @@ public class DiscServiceImpl implements DiscService
         {
             discServiceResult = DiscServiceResult.MissingParamDirector;
         }
-        else if (disc.getTitel().isEmpty())
+        else if (disc.getTitle().isEmpty())
         {
             discServiceResult = DiscServiceResult.MissingParamTitle;
         }
