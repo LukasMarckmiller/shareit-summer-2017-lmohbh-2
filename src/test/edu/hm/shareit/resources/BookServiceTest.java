@@ -1,6 +1,9 @@
 package edu.hm.shareit.resources;
 
 import edu.hm.fachklassen.Book;
+import edu.hm.shareit.resources.BookResource;
+import edu.hm.shareit.resources.BookServiceImpl;
+import edu.hm.shareit.resources.BookServiceResult;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -29,6 +32,7 @@ public class BookServiceTest {
     @Test
     public void noEmptyFieldsAccepted(){
         BookServiceImpl sut = new BookServiceImpl();
+
         //No Titel
         Book book = new Book("","Author","123456");
         BookServiceResult result = sut.addBook(book);
