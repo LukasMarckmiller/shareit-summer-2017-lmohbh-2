@@ -1,3 +1,5 @@
+// CHECKSTYLE:OFF
+//No reason to java doc test methods
 package edu.hm.shareit.resources;
 
 import edu.hm.fachklassen.Book;

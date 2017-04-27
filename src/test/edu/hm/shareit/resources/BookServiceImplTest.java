@@ -1,3 +1,5 @@
+// CHECKSTYLE:OFF
+//No reason to java doc test methods
 package edu.hm.shareit.resources;
 
 import edu.hm.fachklassen.Book;
@@ -15,11 +17,11 @@ import org.junit.Test;
 */
 public class BookServiceImplTest {
 
-    BookServiceImpl sut; //System under Test
+    private BookServiceImpl sut; //System under Test
 
     @Before
     public void reset() {
-        BookServiceImpl.booksSet.clear();
+        BookServiceImpl.BOOKS_SET.clear();
         sut = new BookServiceImpl();
     }
 

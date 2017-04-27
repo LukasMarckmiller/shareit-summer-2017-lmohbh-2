@@ -8,15 +8,30 @@ package edu.hm.fachklassen;
 * Intel(R) Core(TM) i5-4200U CPU @ 1.60GHz 2.30 GHz
 * @Author Sebastian Heunke, heunke@hm.edu
 */
-abstract public class Medium {
+
+/**
+ * Medium representation.
+ */
+public abstract class Medium {
     private final String title;
 
+    /**
+     * Creates new Medium with given Titel.
+     *
+     * @param title of the Medium
+     */
     public Medium(String title) {
-        if (title == null)
+        if (title == null) {
             throw new IllegalArgumentException("Invalid Titel!");
+        }
         this.title = title;
     }
 
+    /**
+     * Get Titel of the Medium.
+     *
+     * @return Titel
+     */
     public String getTitle() {
         return title;
     }
@@ -29,11 +44,12 @@ abstract public class Medium {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o)
+        if (this == o) {
             return true;
-        if (o == null || getClass() != o.getClass())
+        }
+        if (o == null || getClass() != o.getClass()) {
             return false;
-
+        }
         Medium medium = (Medium) o;
 
         return title.equals(medium.title);

@@ -3,6 +3,7 @@ package edu.hm.shareit.resources;
 import javax.ws.rs.core.Response;
 
 /**
+ * Enum describing a Result of a BookService request.
  * Created by Lukas on 12.04.2017.
  */
 public enum BookServiceResult {
@@ -16,15 +17,28 @@ public enum BookServiceResult {
     private final String message;
     private final Response.Status status;
 
+    /**
+     * Creates new Result with a message and status.
+     * @param message message describing why this response is appearing
+     * @param status status of the response
+     */
     BookServiceResult(String message, Response.Status status) {
         this.message = message;
         this.status = status;
     }
 
+    /**
+     * Reponse status of the Result.
+     * @return Response status fitting the result
+     */
     public Response.Status getStatus() {
         return status;
     }
 
+    /**
+     * String message of the reason why this response occurred.
+     * @return User readable string
+     */
     public String getMessage() {
         return message;
     }

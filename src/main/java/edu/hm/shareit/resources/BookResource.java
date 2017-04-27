@@ -13,27 +13,47 @@ import javax.ws.rs.core.Response;
  * Intel Core i5-6600K CPU/3.50GHz overclocked 4.1GHz, 4 cores, 16000 MByte RAM)
  * with IntelliJ IDEA 2017.1.1
  *
- * test: Chrome Plugin Postman for POST and PUT otherwise just write localhost:8082/shareit/media/books or for Discs localhost:8082/shareit/media/discs
+ * test: Chrome Plugin Postman for POST and PUT otherwise just write localhost:8082/shareit/media/books or for Discs localhost:8082/shareit/media/DISCS
   * to get a certain Book or Disc write localhost:8082/shareit/media/books/1234      with 1234 is the isbn number
-  *
+ */
+
+/**
+ * BookResource Rest service handler.
  */
 @Path("/media/books")
 public class BookResource {
 
     private final BookService bookService;
 
+    /**
+     * Default ctor with defaul BookService used.
+     */
     public BookResource() {
         this(new BookServiceImpl());
     }
 
+    /**
+     * Constructor to set other BookServices to be used.
+     * Mainly used to inject Mock objects.
+     * @param data service to be used
+     */
     BookResource(BookService data) {
         bookService = data;
     }
 
+    /**
+     * Returns currently used bookService.
+     * @return current bookService in use
+     */
     private BookService getBookService() {
         return bookService;
     }
 
+    /**
+     * Rest request creating a new Book on the service data.
+     * @param book to be created
+     * @return information about the success
+     */
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     public Response createBook(Book book) {
@@ -44,6 +64,12 @@ public class BookResource {
                 .build();
     }
 
+    /**
+     * Rest request to update a existing book.
+     * @param isbn of the book to be updated.
+     * @param book updated book information
+     * @return response with info about the success
+     */
     @PUT
     @Path("{isbn}")
     @Consumes(MediaType.APPLICATION_JSON)
@@ -57,9 +83,9 @@ public class BookResource {
                     .build();
         }
         //no isbn in request json body
-        else if (book.getIsbn().equals(""))
+        else if (book.getIsbn().equals("")) {
             book = new Book(book.getTitle(), book.getAuthor(), isbn);
-
+        }
 
         //find and replace book object
         final BookServiceResult result = bookService.updateBook(book);
@@ -68,6 +94,10 @@ public class BookResource {
                 .build();
     }
 
+    /**
+     * Rest request to get all the books in an array.
+     * @return Result containg all books in an array.
+     */
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Response getBooks() {
@@ -77,6 +107,11 @@ public class BookResource {
                 .build();
     }
 
+    /**
+     * Rest request to get a book by its isbn.
+     * @param isbn the book should have
+     * @return Result containing either the book or info why not.
+     */
     @GET
     @Path("{isbn}")
     @Produces(MediaType.APPLICATION_JSON)
@@ -91,6 +126,12 @@ public class BookResource {
                 ).build();
     }
 
+
+    /**
+     * Transforms bookServiceResult to JsonObject
+     * @param bookServiceResult to be transformed
+     * @return a jsonObject
+     */
     private JSONObject getJsonFromServiceResult(BookServiceResult bookServiceResult) {
         final JSONObject returnJsonObject = new JSONObject();
         returnJsonObject.put("Status", bookServiceResult.getStatus().getStatusCode());

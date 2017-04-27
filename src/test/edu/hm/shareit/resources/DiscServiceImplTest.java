@@ -1,3 +1,5 @@
+// CHECKSTYLE:OFF
+//No reason to java doc test methods
 package edu.hm.shareit.resources;
 
 import edu.hm.fachklassen.Disc;
@@ -19,7 +21,7 @@ public class DiscServiceImplTest {
 
     @Before
     public void reset() {
-        DiscServiceImpl.discs.clear();
+        DiscServiceImpl.DISCS.clear();
         sut = new DiscServiceImpl();
     }
 

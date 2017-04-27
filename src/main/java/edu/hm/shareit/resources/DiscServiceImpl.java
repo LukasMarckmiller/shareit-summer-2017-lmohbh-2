@@ -10,7 +10,8 @@ import java.util.Set;
  * Created by oliver on 24.04.17.
  */
 public class DiscServiceImpl implements DiscService {
-    final static Set<Disc> discs = new HashSet<>();
+    static final Set<Disc> DISCS = new HashSet<>();
+    private static final int CODE_LENGTH = 13;
 
     @Override
     public DiscServiceResult addDisc(Disc disc) {
@@ -26,11 +27,11 @@ public class DiscServiceImpl implements DiscService {
             discServiceResult = DiscServiceResult.NegativeFSK;
         } else if (getDisc(disc.getBarcode()) != null) {
             discServiceResult = DiscServiceResult.BarcodeAlreadyExists;
-        } else if (disc.getBarcode().length() != 13) {
+        } else if (disc.getBarcode().length() != CODE_LENGTH) {
             discServiceResult = DiscServiceResult.BarcodeInvalidLength;
         } else {
             discServiceResult = DiscServiceResult.AllRight;
-            discs.add(disc);
+            DISCS.add(disc);
         }
 
         return discServiceResult;
@@ -38,7 +39,7 @@ public class DiscServiceImpl implements DiscService {
 
     @Override
     public Disc getDisc(String barcode) {
-        Optional<Disc> discList = discs.stream()
+        Optional<Disc> discList = DISCS.stream()
                 .filter(disc -> disc.getBarcode().equals(barcode))
                 .findFirst();
 
@@ -47,17 +48,17 @@ public class DiscServiceImpl implements DiscService {
 
     @Override
     public Disc[] getDiscs() {
-        return discs.toArray(new Disc[]{});
+        return DISCS.toArray(new Disc[]{});
     }
 
     @Override
     public DiscServiceResult updateDisc(Disc disc) {
         final DiscServiceResult discServiceResult;
-        Optional<Disc> toDelete = discs.stream().filter(other -> other.getBarcode().equals(disc.getBarcode())).findFirst();
+        Optional<Disc> toDelete = DISCS.stream().filter(other -> other.getBarcode().equals(disc.getBarcode())).findFirst();
 
         if (toDelete.isPresent()) {
-            discs.remove(toDelete.get());
-            discs.add(disc);
+            DISCS.remove(toDelete.get());
+            DISCS.add(disc);
             discServiceResult = DiscServiceResult.AllRight;
         } else {
             discServiceResult = DiscServiceResult.NoDiscWithBarcodeFound;

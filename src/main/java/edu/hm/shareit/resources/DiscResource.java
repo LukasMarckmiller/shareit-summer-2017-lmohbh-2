@@ -13,14 +13,26 @@ import javax.ws.rs.core.Response;
 public class DiscResource {
     private final DiscService discService;
 
+    /**
+     * Creates a new DiskResource to handle requests.
+     */
     public DiscResource() {
         this(new DiscServiceImpl());
     }
 
+    /**
+     * Ctor with added parameters to change background service used.
+     * @param service to be used instead of the default.
+     */
     DiscResource(DiscService service) {
         discService = service;
     }
 
+    /**
+     * Rest request creating a new Disc in the service.
+     * @param disc to be created
+     * @return response containing information about the success
+     */
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     public Response createDisc(Disc disc) {
@@ -29,12 +41,21 @@ public class DiscResource {
         return Response.status(discServiceResult.getStatus()).build();
     }
 
+    /**
+     * Rest request to get all currently saved discs.
+     * @return Response containg all discs in an array.
+     */
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Response getDiscs() {
         return Response.status(Response.Status.OK).entity(discService.getDiscs()).build();
     }
 
+    /**
+     * Rest request to get a disc from the service.
+     * @param barcode of the disc required
+     * @return disc if found
+     */
     @GET
     @Path("/{barcode}")
     @Produces(MediaType.APPLICATION_JSON)
@@ -45,6 +66,12 @@ public class DiscResource {
         return Response.status(responseStatus).entity(disc).build();
     }
 
+    /**
+     * Rest request to update an existing disc.
+     * @param barcode of the disc to be updated
+     * @param disc with the new updated values
+     * @return Response with Status about success
+     */
     @PUT
     @Path("/{barcode}")
     @Consumes(MediaType.APPLICATION_JSON)
