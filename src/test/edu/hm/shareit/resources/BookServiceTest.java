@@ -1,13 +1,14 @@
 package edu.hm.shareit.resources;
 
 import edu.hm.fachklassen.Book;
-import edu.hm.shareit.resources.BookResource;
-import edu.hm.shareit.resources.BookServiceImpl;
-import edu.hm.shareit.resources.BookServiceResult;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 
 import javax.ws.rs.core.Response;
+
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 /*
 *ShareIt
@@ -19,124 +20,67 @@ import javax.ws.rs.core.Response;
 */
 
 public class BookServiceTest {
+    private BookResource sut = new BookResource();
+    private BookService serviceMock;
 
-    //Tests for the BookServiceImplementation
-    @Test
-    public void addingValidBook(){
-        BookServiceImpl sut = new BookServiceImpl();
-        Book book = new Book("Mobby Dick","Author","123456");
-        BookServiceResult result = sut.addBook(book);
-        Assert.assertEquals(BookServiceResult.AllRight,result);
+    @Before
+    public void setUp(){
+        serviceMock = mock(BookService.class);
+        sut = new BookResource(serviceMock);
     }
-
-    @Test
-    public void noEmptyFieldsAccepted(){
-        BookServiceImpl sut = new BookServiceImpl();
-
-        //No Titel
-        Book book = new Book("","Author","123456");
-        BookServiceResult result = sut.addBook(book);
-        Assert.assertEquals(BookServiceResult.MissingParamTitle,result);
-        //No Author
-        book = new Book("Java for Dummies","","42");
-        result = sut.addBook(book);
-        Assert.assertEquals(BookServiceResult.MissingParamAuthor,result);
-        //No Isbn
-        book = new Book("Isbn Book","Santa Claus","");
-        result = sut.addBook(book);
-        Assert.assertEquals(BookServiceResult.MissingParamIsbn,result);
-    }
-
-    @Test
-    public void getBooksWorks(){ //todo: rewrite
-        Book[] expected = new Book[2];
-        BookServiceImpl sut = new BookServiceImpl();
-        Book book = new Book("My First Book","Someone","#1");
-        expected[0] = book;
-        sut.addBook(book);
-
-        book = new Book("My Second Book","Someone","#2");
-        sut.addBook(book);
-        expected[1] = book;
-        Book[] result = sut.getBooks();
-        Assert.assertTrue(result.length >= 2); //temporary workaround, need to reset data between tests
-    }
-
-    @Test
-    public void getBookWorks(){
-        BookServiceImpl sut = new BookServiceImpl();
-        Book book = new Book("booooook","authoooor","isbn");
-        sut.addBook(book);
-        Book result = sut.getBook("isbn");
-        Assert.assertEquals(book,result);
-
-        result = sut.getBook("Hello Book Service!");
-        Assert.assertEquals(null,result);
-
-    }
-
-    @Test
-    public void updateBookWorks() {
-        BookServiceImpl sut = new BookServiceImpl();
-        Book book = new Book("HeloWorld","Me","0");
-        sut.addBook(book);
-        book = new Book("Hello World!","Not Me","0");
-        BookServiceResult result = sut.updateBook(book);
-        Assert.assertEquals(BookServiceResult.AllRight,result);
-
-        Book updatedBook = sut.getBook("0");
-        Assert.assertEquals(book,updatedBook);
-
-        result = sut.updateBook(new Book("Goodbye.","?","42"));
-        Assert.assertEquals(BookServiceResult.NoBookWithIsbnFound,result);
-    }
-
-    /*
-    Test for the BookResource Class. At this point the BookServiceImpl should be save to asume working.
-     */
-
 
     @Test
     public void postNewBook(){
-        BookResource sut = new BookResource();
         Book book = new Book("TITEL","AUTHOR","ISBN");
+        when(serviceMock.addBook(book)).thenReturn(BookServiceResult.AllRight);
         Response result = sut.createBook(book);
         Assert.assertEquals(Response.Status.OK.getStatusCode(),result.getStatus());
 
         book = new Book("","AUTHOR","4");
+        when(serviceMock.addBook(book)).thenReturn(BookServiceResult.MissingParamTitle);
         result = sut.createBook(book);
         Assert.assertEquals(Response.Status.BAD_REQUEST.getStatusCode(),result.getStatus());
 
         book = new Book("A good Titel","A medicore Author","");
+        when(serviceMock.addBook(book)).thenReturn(BookServiceResult.MissingParamIsbn);
         result = sut.createBook(book);
         Assert.assertEquals(Response.Status.BAD_REQUEST.getStatusCode(),result.getStatus());
 
         book = new Book("No Book","","404");
+        when(serviceMock.addBook(book)).thenReturn(BookServiceResult.MissingParamAuthor);
         result = sut.createBook(book);
         Assert.assertEquals(Response.Status.BAD_REQUEST.getStatusCode(),result.getStatus());
 
-        //todo: dupplicate handling
+        book = new Book("Just another Book","One more Author","ISBN");
+        when(serviceMock.addBook(book)).thenReturn(BookServiceResult.BookWithIsbnExistsAlready);
+        result = sut.createBook(book);
+        Assert.assertEquals(Response.Status.BAD_REQUEST.getStatusCode(),result.getStatus());
     }
 
     @Test
     public void getPostedBooks(){
-        BookResource sut = new BookResource();
         Book book = new Book(".",",",";");
+        when(serviceMock.addBook(book)).thenReturn(BookServiceResult.AllRight);
+        when(serviceMock.getBook(";")).thenReturn(book);
         sut.createBook(book);
         Response result = sut.getBook(";");
         Assert.assertEquals(book,result.getEntity());
 
         Response nullBook = sut.getBook("NOT A ISBN");
-        Assert.assertEquals(null, nullBook.getEntity());
+        when(serviceMock.getBook("NOT A ISBN")).thenReturn(null);
+        Assert.assertEquals(Response.Status.BAD_REQUEST.getStatusCode(), nullBook.getStatus());
 
+        when(serviceMock.getBooks()).thenReturn(new Book[] {book});
         result = sut.getBooks();
-        Assert.assertEquals(Book[].class,result.getEntity().getClass());//temporary test
+        Assert.assertArrayEquals(new Book[] {book},(Book[])result.getEntity());//temporary test
     }
 
     @Test
     public void updateBooks(){
-        BookResource sut = new BookResource();
         Book book = new Book("abc","def","ghi");
+        when(serviceMock.addBook(book)).thenReturn(BookServiceResult.AllRight);
+        when(serviceMock.updateBook(new Book("ABC","DEF","XYZ"))).thenReturn(BookServiceResult.NoBookWithIsbnFound);
+        when(serviceMock.getBook("ghi")).thenReturn(book);
         sut.createBook(book);
         Response result = sut.updateBook("ghi",new Book("ABC","DEF","XYZ"));
 
@@ -144,9 +88,19 @@ public class BookServiceTest {
         Assert.assertEquals(book,sut.getBook("ghi").getEntity());
 
         book = new Book("ABC","DEF","ghi");
+        when(serviceMock.updateBook(book)).thenReturn(BookServiceResult.AllRight);
+        when(serviceMock.getBook("ghi")).thenReturn(book);
         result = sut.updateBook("ghi",book);
         Assert.assertEquals(Response.Status.OK.getStatusCode(),result.getStatus());
         Assert.assertEquals(book,sut.getBook("ghi").getEntity());
+
+        book = new Book("New","Book","!");
+        when(serviceMock.addBook(book)).thenReturn(BookServiceResult.AllRight);
+        sut.createBook(book);
+        book = new Book("Old","Scroll","");
+        when(serviceMock.updateBook(new Book("Old","Scroll","!"))).thenReturn(BookServiceResult.AllRight);
+        result = sut.updateBook("!",book);
+        Assert.assertEquals(Response.Status.OK.getStatusCode(),result.getStatus());
     }
 
 

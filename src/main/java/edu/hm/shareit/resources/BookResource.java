@@ -23,7 +23,11 @@ public class BookResource {
     private final BookService bookService;
 
     public BookResource() {
-        this.bookService = new BookServiceImpl();
+        this(new BookServiceImpl());
+    }
+
+    BookResource(BookService data){
+        bookService = data;
     }
 
     private BookService getBookService() {
