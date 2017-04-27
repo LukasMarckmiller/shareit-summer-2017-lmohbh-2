@@ -11,9 +11,13 @@ import javax.ws.rs.core.Response;
 @Path("/media/discs")
 public class DiscResource
 {
-    private final DiscService discService = new DiscServiceImpl();
+    private final DiscService discService;
 
-    public DiscResource(){}
+    public DiscResource(){this(new DiscServiceImpl());}
+
+    DiscResource(DiscService service){
+        discService = service;
+    }
 
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
@@ -37,7 +41,7 @@ public class DiscResource
     public Response getDisc(@PathParam("barcode") String barcode)
     {
         final Disc disc = discService.getDisc(barcode);
-        final Response.Status responseStatus = disc.equals(null) ? Response.Status.BAD_REQUEST : Response.Status.OK;
+        final Response.Status responseStatus = disc == null ? Response.Status.BAD_REQUEST : Response.Status.OK;
 
         return Response.status(responseStatus).entity(disc).build();
     }

@@ -19,7 +19,7 @@ import static org.mockito.Mockito.when;
 * @Author Sebastian Heunke, heunke@hm.edu
 */
 
-public class BookServiceTest {
+public class BookResourceTest {
     private BookResource sut = new BookResource();
     private BookService serviceMock;
 
@@ -66,8 +66,8 @@ public class BookServiceTest {
         Response result = sut.getBook(";");
         Assert.assertEquals(book,result.getEntity());
 
-        Response nullBook = sut.getBook("NOT A ISBN");
         when(serviceMock.getBook("NOT A ISBN")).thenReturn(null);
+        Response nullBook = sut.getBook("NOT A ISBN");
         Assert.assertEquals(Response.Status.BAD_REQUEST.getStatusCode(), nullBook.getStatus());
 
         when(serviceMock.getBooks()).thenReturn(new Book[] {book});
