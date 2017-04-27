@@ -13,6 +13,7 @@ public class Book extends Medium {
     private final String author;
 
     private final String isbn;
+
     private Book() {
         this("", "", "");
     }
@@ -35,7 +36,7 @@ public class Book extends Medium {
     }
 
     @Override
-    public String toString(){
+    public String toString() {
         return "[" + getAuthor() + ": " + getTitle() + " (" + getIsbn() + ")]";
     }
 

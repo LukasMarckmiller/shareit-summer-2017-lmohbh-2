@@ -12,7 +12,7 @@ public class Copy {
     private final Medium medium;
     private final String owner;
 
-    Copy(String owner, Medium medium){
+    Copy(String owner, Medium medium) {
         if (owner == null || medium == null)
             throw new IllegalArgumentException("Arguments cant be null!");
         this.owner = owner;

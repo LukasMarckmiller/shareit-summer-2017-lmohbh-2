@@ -26,7 +26,7 @@ public class BookResource {
         this(new BookServiceImpl());
     }
 
-    BookResource(BookService data){
+    BookResource(BookService data) {
         bookService = data;
     }
 

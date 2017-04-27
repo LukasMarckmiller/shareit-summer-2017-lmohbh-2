@@ -5,8 +5,7 @@ import edu.hm.fachklassen.Disc;
 /**
  * Created by oliver on 12.04.17.
  */
-public interface DiscService
-{
+public interface DiscService {
     DiscServiceResult addDisc(Disc disc);
 
     Disc getDisc(String barcode);

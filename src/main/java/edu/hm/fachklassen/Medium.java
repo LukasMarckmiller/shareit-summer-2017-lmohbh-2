@@ -11,18 +11,18 @@ package edu.hm.fachklassen;
 abstract public class Medium {
     private final String title;
 
-    public Medium(String title){
-        if(title == null)
+    public Medium(String title) {
+        if (title == null)
             throw new IllegalArgumentException("Invalid Titel!");
         this.title = title;
     }
 
-    public String getTitle(){
+    public String getTitle() {
         return title;
     }
 
     @Override
-    public String toString(){
+    public String toString() {
         return getTitle();
     }
 

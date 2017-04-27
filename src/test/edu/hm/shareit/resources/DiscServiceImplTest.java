@@ -16,95 +16,96 @@ import org.junit.Test;
 public class DiscServiceImplTest {
 
     private DiscServiceImpl sut; //System under Test
+
     @Before
-    public void reset(){
+    public void reset() {
         DiscServiceImpl.discs.clear();
         sut = new DiscServiceImpl();
     }
 
     //Tests for the BookServiceImplementation
     @Test
-    public void addingValidDisc(){
-        Disc disc = new Disc("Disc","1234567890123",0,"Director");
+    public void addingValidDisc() {
+        Disc disc = new Disc("Disc", "1234567890123", 0, "Director");
 
         DiscServiceResult result = sut.addDisc(disc);
-        Assert.assertEquals(DiscServiceResult.AllRight,result);
+        Assert.assertEquals(DiscServiceResult.AllRight, result);
     }
 
     @Test
-    public void noEmptyFieldsAccepted(){
+    public void noEmptyFieldsAccepted() {
         //No barcode
-        Disc disc = new Disc("Dangerous Disc","",18,"H4ck0r");
+        Disc disc = new Disc("Dangerous Disc", "", 18, "H4ck0r");
         DiscServiceResult result = sut.addDisc(disc);
-        Assert.assertEquals(DiscServiceResult.MissingParamBarcode,result);
+        Assert.assertEquals(DiscServiceResult.MissingParamBarcode, result);
         //No director
-        disc = new Disc("Wikipedia","1111111111111",42,"");
+        disc = new Disc("Wikipedia", "1111111111111", 42, "");
         result = sut.addDisc(disc);
-        Assert.assertEquals(DiscServiceResult.MissingParamDirector,result);
+        Assert.assertEquals(DiscServiceResult.MissingParamDirector, result);
         //No titel
-        disc = new Disc("","0000000000001",0,"Super Mario");
+        disc = new Disc("", "0000000000001", 0, "Super Mario");
         result = sut.addDisc(disc);
-        Assert.assertEquals(DiscServiceResult.MissingParamTitle,result);
+        Assert.assertEquals(DiscServiceResult.MissingParamTitle, result);
         //Negative fsk
-        disc = new Disc("How to get born","1010101010101",-1,"Baby");
+        disc = new Disc("How to get born", "1010101010101", -1, "Baby");
         result = sut.addDisc(disc);
-        Assert.assertEquals(DiscServiceResult.NegativeFSK,result);
+        Assert.assertEquals(DiscServiceResult.NegativeFSK, result);
         //Duplicate Barcode
-        disc = new Disc("OUTPUT_DISC.disc","0000000011111",10010,"Mr Roboto");
+        disc = new Disc("OUTPUT_DISC.disc", "0000000011111", 10010, "Mr Roboto");
         sut.addDisc(disc);
         result = sut.addDisc(disc);
-        Assert.assertEquals(DiscServiceResult.BarcodeAlreadyExists,result);
+        Assert.assertEquals(DiscServiceResult.BarcodeAlreadyExists, result);
         //Invalid Barcode Length
-        disc = new Disc("My first disc","1",1,"Me");
+        disc = new Disc("My first disc", "1", 1, "Me");
         result = sut.addDisc(disc);
-        Assert.assertEquals(DiscServiceResult.BarcodeInvalidLength,result);
+        Assert.assertEquals(DiscServiceResult.BarcodeInvalidLength, result);
     }
 
     @Test
-    public void getDiscWorks(){
+    public void getDiscWorks() {
 
-        Disc disc = new Disc("Tetris","0987654321321",8,"Blocks");
+        Disc disc = new Disc("Tetris", "0987654321321", 8, "Blocks");
         sut.addDisc(disc);
         Disc result = sut.getDisc("0987654321321");
-        Assert.assertEquals(disc,result);
+        Assert.assertEquals(disc, result);
 
         result = sut.getDisc("Hello Disc Service!");
-        Assert.assertEquals(null,result);
+        Assert.assertEquals(null, result);
     }
 
     @Test
-    public void getDiscsWorks(){
+    public void getDiscsWorks() {
         Disc[] expected = new Disc[2];
-        Disc disc = new Disc("My First Disc","1111111111111",1,"#1");
+        Disc disc = new Disc("My First Disc", "1111111111111", 1, "#1");
         expected[0] = disc;
         sut.addDisc(disc);
 
-        disc = new Disc("My Second Disc","2222222222222",2,"#2");
+        disc = new Disc("My Second Disc", "2222222222222", 2, "#2");
         sut.addDisc(disc);
         expected[1] = disc;
         Disc[] result = sut.getDiscs();
         //Manually sort result array, there is no guaranteed order.
-        if(result[0] != expected[0]){
+        if (result[0] != expected[0]) {
             Disc tmp = result[0];
             result[0] = result[1];
             result[1] = tmp;
         }
-        Assert.assertArrayEquals(expected,result);
+        Assert.assertArrayEquals(expected, result);
 
     }
 
     @Test
     public void updateDiscWorks() {
-        Disc disc = new Disc("Heol World!","9999999999999",9,"Java");
+        Disc disc = new Disc("Heol World!", "9999999999999", 9, "Java");
         sut.addDisc(disc);
-        disc = new Disc("Hello World!","9999999999999",8,"Java");
+        disc = new Disc("Hello World!", "9999999999999", 8, "Java");
         DiscServiceResult result = sut.updateDisc(disc);
-        Assert.assertEquals(DiscServiceResult.AllRight,result);
+        Assert.assertEquals(DiscServiceResult.AllRight, result);
 
         Disc updatedDisc = sut.getDisc("9999999999999");
-        Assert.assertEquals(disc,updatedDisc);
+        Assert.assertEquals(disc, updatedDisc);
 
-        result = sut.updateDisc(new Disc("Goodbye.","666666666666",5,"?"));
-        Assert.assertEquals(DiscServiceResult.NoDiscWithBarcodeFound,result);
+        result = sut.updateDisc(new Disc("Goodbye.", "666666666666", 5, "?"));
+        Assert.assertEquals(DiscServiceResult.NoDiscWithBarcodeFound, result);
     }
 }
