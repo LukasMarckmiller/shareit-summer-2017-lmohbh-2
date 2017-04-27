@@ -2,6 +2,7 @@ package edu.hm.shareit.resources;
 
 import edu.hm.fachklassen.Disc;
 
+import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 import java.util.TreeSet;
@@ -11,7 +12,7 @@ import java.util.TreeSet;
  */
 public class DiscServiceImpl implements DiscService
 {
-    final Set<Disc> discs = new TreeSet<>();
+    final static Set<Disc> discs = new HashSet<>();
 
     @Override
     public DiscServiceResult addDisc(Disc disc)
@@ -34,7 +35,7 @@ public class DiscServiceImpl implements DiscService
         {
             discServiceResult = DiscServiceResult.NegativeFSK;
         }
-        else if (getDisc(disc.getBarcode()).getBarcode().equals(disc.getBarcode()))
+        else if (getDisc(disc.getBarcode()) != null)
         {
             discServiceResult = DiscServiceResult.BarcodeAlreadyExists;
         }
@@ -71,9 +72,11 @@ public class DiscServiceImpl implements DiscService
     public DiscServiceResult updateDisc(Disc disc)
     {
         final DiscServiceResult discServiceResult;
+        Optional<Disc> toDelete = discs.stream().filter(other -> other.getBarcode().equals(disc.getBarcode())).findFirst();
 
-        if (discs.remove(disc))
+        if (toDelete.isPresent())
         {
+            discs.remove(toDelete.get());
             discs.add(disc);
             discServiceResult = DiscServiceResult.AllRight;
         }

@@ -5,8 +5,6 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.HashSet;
-
 /*
 *ShareIt
 * Date: 27.04.2017
@@ -55,7 +53,7 @@ public class BookServiceImplTest {
     }
 
     @Test
-    public void getBooksWorks(){ //todo: rewrite
+    public void getBooksWorks(){
         Book[] expected = new Book[2];
         Book book = new Book("My First Book","Someone","#1");
         expected[0] = book;
