@@ -1,1 +1,5 @@
-# Starter Code für 2. Pratkikumsaufgabe Software-Architektur Sommer 2017 
+# Shareit Project
+
+
+Heroku Link:
+https://dry-harbor-85222.herokuapp.com
