@@ -90,7 +90,7 @@ public class BookResource {
         //find and replace book object
         final BookServiceResult result = bookService.updateBook(book);
         return Response.status(result.getStatus().getStatusCode())
-                .entity(getJsonFromServiceResult(result))
+                .entity(getJsonFromServiceResult(result).toString())
                 .build();
     }
 
