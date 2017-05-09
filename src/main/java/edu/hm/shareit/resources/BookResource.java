@@ -79,7 +79,7 @@ public class BookResource {
         //the service
         if (!book.getIsbn().equals("") && !isbn.equals(book.getIsbn())) {
             return Response.status(Response.Status.BAD_REQUEST)
-                    .entity(new JSONObject().put("Message", "Isbn differs from isbn specified in payload."))
+                    .entity(new JSONObject().put("Message", "Isbn differs from isbn specified in payload.").toString())
                     .build();
         }
         //no isbn in request json body
