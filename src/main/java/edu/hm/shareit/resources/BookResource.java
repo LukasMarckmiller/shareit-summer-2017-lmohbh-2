@@ -60,7 +60,7 @@ public class BookResource {
         final BookServiceResult result = bookService.addBook(book);
         return Response
                 .status(result.getStatus())
-                .entity(getJsonFromServiceResult(result).toString())
+                .entity(getJsonFromServiceResult(result))
                 .build();
     }
 
@@ -90,7 +90,7 @@ public class BookResource {
         //find and replace book object
         final BookServiceResult result = bookService.updateBook(book);
         return Response.status(result.getStatus().getStatusCode())
-                .entity(getJsonFromServiceResult(result).toString())
+                .entity(getJsonFromServiceResult(result))
                 .build();
     }
 
@@ -132,10 +132,10 @@ public class BookResource {
      * @param bookServiceResult to be transformed
      * @return a jsonObject
      */
-    private JSONObject getJsonFromServiceResult(BookServiceResult bookServiceResult) {
+    private String getJsonFromServiceResult(BookServiceResult bookServiceResult) {
         final JSONObject returnJsonObject = new JSONObject();
         returnJsonObject.put("Status", bookServiceResult.getStatus().getStatusCode());
         returnJsonObject.put("Message", bookServiceResult.getMessage());
-        return returnJsonObject;
+        return returnJsonObject.toString();
     }
 }
