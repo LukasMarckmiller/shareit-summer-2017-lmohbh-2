@@ -2,7 +2,9 @@
 // Never change a running System :-)
 package edu.hm;
 
+import org.eclipse.jetty.server.Handler;
 import org.eclipse.jetty.server.Server;
+import org.eclipse.jetty.server.handler.HandlerWrapper;
 import org.eclipse.jetty.webapp.WebAppContext;
 
 /**
@@ -24,7 +26,10 @@ public class JettyStarter {
      */
     public static void main(String... args) throws Exception {
         Server jetty = new Server(PORT);
-        jetty.setHandler(new WebAppContext(WEBAPP_DIR, APP_URL));
+        Handler handler = new WebAppContext(WEBAPP_DIR, APP_URL);
+        HandlerWrapper auth = new AuthorisationHandler();
+        auth.setHandler(handler);
+        jetty.setHandler(auth);
         jetty.start();
         System.out.println("Jetty listening on port " + PORT);
         jetty.join();
