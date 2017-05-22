@@ -7,7 +7,9 @@ import org.json.JSONObject;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -23,14 +25,13 @@ import java.net.URLConnection;
 */
 public class AuthorisationHandler extends HandlerWrapper {
 
-    private static final String TOKEN_HEADER = "Token";
+    private static final String TOKEN_HEADER = "Authorization";
     private static final String AUTH_SERVER = "localhost";
     private static final int AUTH_PORT = 8083;
 
 
     @Override public void handle(String target, Request baseRequest, HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-        boolean isAuthorized = false;
-        isAuthorized = baseRequest.getHeader(TOKEN_HEADER) != null;
+        boolean isAuthorized = sendRestRequest(baseRequest.getHeader(TOKEN_HEADER));
         if(isAuthorized)
             super.handle(target,baseRequest,request,response);
         else{
@@ -48,16 +49,24 @@ public class AuthorisationHandler extends HandlerWrapper {
         }
     }
 
-    private static void sendRestRequest() throws MalformedURLException {
-        URL authUrl = new URL(AUTH_SERVER + ":" + AUTH_PORT + "/auth/vallidate/"); //todo: insert correct path
-
+    private static boolean sendRestRequest(String token) throws MalformedURLException {
+        int response = -1;
+        URL authUrl = new URL("http://" + AUTH_SERVER + ":" + AUTH_PORT + "/auth/token"); //todo: insert correct path
+        //URL authUrl = new URL("http://www.mathwarehouse.com/geometry/congruent_triangles/side-angle-side-postulate.php");
         try {
             HttpURLConnection authConnection =(HttpURLConnection) authUrl.openConnection();
+            authConnection.setUseCaches(false);
             authConnection.setRequestMethod("GET");
-            //todo: see implementation of auth server
+            authConnection.setRequestProperty(TOKEN_HEADER,token);
+            response = authConnection.getResponseCode();
+            //BufferedReader reader = new BufferedReader(new InputStreamReader(authConnection.getInputStream()));
+            //reader.lines().forEach(System.out::println);
         } catch (IOException e) {
             System.err.println("Authentication Server did not respond.");
+            e.printStackTrace();
         }
+
+        return response == 200 ;
     }
 
 }
