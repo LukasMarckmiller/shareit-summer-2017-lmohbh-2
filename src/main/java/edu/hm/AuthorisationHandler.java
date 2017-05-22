@@ -53,7 +53,6 @@ public class AuthorisationHandler extends HandlerWrapper {
         JSONObject response = new JSONObject();
 
         URL authUrl = new URL("http://" + AUTH_SERVER + ":" + AUTH_PORT + "/auth/token"); //todo: insert correct path
-        //URL authUrl = new URL("http://www.mathwarehouse.com/geometry/congruent_triangles/side-angle-side-postulate.php");
         try {
             HttpURLConnection authConnection =(HttpURLConnection) authUrl.openConnection();
             authConnection.setUseCaches(false);
