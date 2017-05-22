@@ -60,7 +60,9 @@ public class AuthorisationHandler extends HandlerWrapper {
             authConnection.setRequestProperty(TOKEN_HEADER,token);
             //response = authConnection.getResponseCode();
             StringBuilder json = new StringBuilder();
-            new BufferedReader(new InputStreamReader(authConnection.getInputStream())).lines().forEach(json::append);
+            BufferedReader reader = new BufferedReader(new InputStreamReader(authConnection.getInputStream()));
+            reader.lines().forEach(json::append);
+            reader.close();
             response = new JSONObject(json.toString());
             System.out.println(json.toString()); //todo: remove
             //BufferedReader reader = new BufferedReader(new InputStreamReader(authConnection.getInputStream()));
