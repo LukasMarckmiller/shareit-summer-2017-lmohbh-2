@@ -41,7 +41,7 @@ public class AuthorisationHandler extends HandlerWrapper {
             JSONObject responseMessage = new JSONObject();
             responseMessage.put("Status",401);
             responseMessage.put("Message","Unauthorized access, contact Authorization Server to gain access.");
-            if(authResponse.getInt("Status") != 404 && authResponse.has("Message"))
+            if(authResponse.getInt("Status") != 502 && authResponse.has("Message"))
                 responseMessage.put("Reason",authResponse.getString("Message"));
             else
                 responseMessage.put("Reason","Authorization Server failed.");
@@ -54,7 +54,7 @@ public class AuthorisationHandler extends HandlerWrapper {
 
     private static JSONObject sendRestRequest(String token) throws MalformedURLException {
         JSONObject response = new JSONObject();
-        response.put("Status",404);
+        response.put("Status",502);
 
         URL authUrl = new URL("http://" + AUTH_SERVER + ":" + AUTH_PORT + "/auth/a4/token"); //todo: insert correct path
         try {
