@@ -41,7 +41,10 @@ public class AuthorisationHandler extends HandlerWrapper {
             JSONObject responseMessage = new JSONObject();
             responseMessage.put("Status",401);
             responseMessage.put("Message","Unauthorized access, contact Authorization Server to gain access.");
-            responseMessage.put("Reason",authResponse.getString("Message"));
+            if(authResponse.getInt("Status") != 404 && authResponse.has("Message"))
+                responseMessage.put("Reason",authResponse.getString("Message"));
+            else
+                responseMessage.put("Reason","Authorization Server failed.");
             responseMessage.put("Authorization Server",AUTH_SERVER);
             responseMessage.put("Authorization Port",AUTH_PORT);
             responseMessage.write(response.getWriter());
