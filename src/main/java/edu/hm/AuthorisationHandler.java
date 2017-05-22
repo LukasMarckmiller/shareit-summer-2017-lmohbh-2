@@ -52,7 +52,7 @@ public class AuthorisationHandler extends HandlerWrapper {
     private static JSONObject sendRestRequest(String token) throws MalformedURLException {
         JSONObject response = new JSONObject();
 
-        URL authUrl = new URL("http://" + AUTH_SERVER + ":" + AUTH_PORT + "/auth/token"); //todo: insert correct path
+        URL authUrl = new URL("http://" + AUTH_SERVER + ":" + AUTH_PORT + "/auth/a4/token"); //todo: insert correct path
         try {
             HttpURLConnection authConnection =(HttpURLConnection) authUrl.openConnection();
             authConnection.setUseCaches(false);
