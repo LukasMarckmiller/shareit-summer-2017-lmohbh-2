@@ -61,7 +61,8 @@ public class AuthorisationHandler extends HandlerWrapper {
             //response = authConnection.getResponseCode();
             StringBuilder json = new StringBuilder();
             new BufferedReader(new InputStreamReader(authConnection.getInputStream())).lines().forEach(json::append);
-            response = new JSONObject(json);
+            response = new JSONObject(json.toString());
+            System.out.println(json.toString()); //todo: remove
             //BufferedReader reader = new BufferedReader(new InputStreamReader(authConnection.getInputStream()));
             //reader.lines().forEach(System.out::println);
         } catch (IOException e) {
