@@ -31,8 +31,8 @@ public class AuthorisationHandler extends HandlerWrapper {
 
 
     @Override public void handle(String target, Request baseRequest, HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-        boolean isAuthorized = sendRestRequest(baseRequest.getHeader(TOKEN_HEADER));
-        if(isAuthorized)
+        JSONObject authResponse = sendRestRequest(baseRequest.getHeader(TOKEN_HEADER));
+        if(authResponse.getInt("Status") == 200)
             super.handle(target,baseRequest,request,response);
         else{
             //Unauthorized access
@@ -41,7 +41,7 @@ public class AuthorisationHandler extends HandlerWrapper {
             JSONObject responseMessage = new JSONObject();
             responseMessage.put("Status",401);
             responseMessage.put("Message","Unauthorized access, contact Authorization Server to gain access.");
-            //Maybe add reason authorization failed from auth response.
+            responseMessage.put("Reason",authResponse.getString("Message"));
             responseMessage.put("Authorization Server",AUTH_SERVER);
             responseMessage.put("Authorization Port",AUTH_PORT);
             responseMessage.write(response.getWriter());
@@ -49,8 +49,9 @@ public class AuthorisationHandler extends HandlerWrapper {
         }
     }
 
-    private static boolean sendRestRequest(String token) throws MalformedURLException {
-        int response = -1;
+    private static JSONObject sendRestRequest(String token) throws MalformedURLException {
+        JSONObject response = new JSONObject();
+
         URL authUrl = new URL("http://" + AUTH_SERVER + ":" + AUTH_PORT + "/auth/token"); //todo: insert correct path
         //URL authUrl = new URL("http://www.mathwarehouse.com/geometry/congruent_triangles/side-angle-side-postulate.php");
         try {
@@ -58,15 +59,17 @@ public class AuthorisationHandler extends HandlerWrapper {
             authConnection.setUseCaches(false);
             authConnection.setRequestMethod("GET");
             authConnection.setRequestProperty(TOKEN_HEADER,token);
-            response = authConnection.getResponseCode();
+            //response = authConnection.getResponseCode();
+            StringBuilder json = new StringBuilder();
+            new BufferedReader(new InputStreamReader(authConnection.getInputStream())).lines().forEach(json::append);
+            response = new JSONObject(json);
             //BufferedReader reader = new BufferedReader(new InputStreamReader(authConnection.getInputStream()));
             //reader.lines().forEach(System.out::println);
         } catch (IOException e) {
             System.err.println("Authentication Server did not respond.");
             e.printStackTrace();
         }
-
-        return response == 200 ;
+        return response;
     }
 
 }
