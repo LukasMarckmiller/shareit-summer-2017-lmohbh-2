@@ -68,9 +68,6 @@ public class AuthorisationHandler extends HandlerWrapper {
             reader.lines().forEach(json::append);
             reader.close();
             response = new JSONObject(json.toString());
-            System.out.println(json.toString()); //todo: remove
-            //BufferedReader reader = new BufferedReader(new InputStreamReader(authConnection.getInputStream()));
-            //reader.lines().forEach(System.out::println);
         } catch (IOException e) {
             System.err.println("Authentication Server did not respond.");
             e.printStackTrace();
