@@ -26,25 +26,30 @@ import java.net.URLConnection;
 public class AuthorisationHandler extends HandlerWrapper {
 
     private static final String TOKEN_HEADER = "Authorization";
-    private static final String AUTH_SERVER = "localhost";
+    private static final String AUTH_SERVER = "authserverhm.herokuapp.com";
     private static final int AUTH_PORT = 8083;
 
 
     @Override public void handle(String target, Request baseRequest, HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+        System.out.println("Incoming request.");
         JSONObject authResponse = sendRestRequest(baseRequest.getHeader(TOKEN_HEADER));
-        if(authResponse.getInt("Status") == 200)
-            super.handle(target,baseRequest,request,response);
+        if(authResponse.getInt("Status") == 200) {
+            super.handle(target, baseRequest, request, response);
+        }
         else{
             //Unauthorized access
             response.setContentType("application/json;charset=UTF-8");
             response.setStatus(401);
             JSONObject responseMessage = new JSONObject();
-            responseMessage.put("Status",401);
             responseMessage.put("Message","Unauthorized access, contact Authorization Server to gain access.");
-            if(authResponse.getInt("Status") != 502 && authResponse.has("Message"))
-                responseMessage.put("Reason",authResponse.getString("Message"));
-            else
-                responseMessage.put("Reason","Authorization Server failed.");
+            if(authResponse.getInt("Status") != 502 && authResponse.has("Message")) {
+                responseMessage.put("Status",401);
+                responseMessage.put("Reason", authResponse.getString("Message"));
+            }
+            else {
+                responseMessage.put("Status",502);
+                responseMessage.put("Reason", "Authorization Server failed.");
+            }
             responseMessage.put("Authorization Server",AUTH_SERVER);
             responseMessage.put("Authorization Port",AUTH_PORT);
             responseMessage.write(response.getWriter());
@@ -56,7 +61,8 @@ public class AuthorisationHandler extends HandlerWrapper {
         JSONObject response = new JSONObject();
         response.put("Status",502);
 
-        URL authUrl = new URL("http://" + AUTH_SERVER + ":" + AUTH_PORT + "/auth/a4/token"); //todo: insert correct path
+        //URL authUrl = new URL("http://" + AUTH_SERVER + ":" + AUTH_PORT + "/auth/a4/token");
+        URL authUrl = new URL("http://" + AUTH_SERVER + "/auth/a4/token");
         try {
             HttpURLConnection authConnection =(HttpURLConnection) authUrl.openConnection();
             authConnection.setUseCaches(false);
