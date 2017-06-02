@@ -7,11 +7,12 @@ import javax.ws.rs.core.Response;
  * Created by Lukas on 12.04.2017.
  */
 public enum BookServiceResult {
-    NoBookWithIsbnFound("No book with given isbn found (maybe a typo, isbn´s are pretty long).", Response.Status.BAD_REQUEST),
+    NoBookWithIsbnFound("No book with given ISBN found (maybe a typo, ISBN´s are pretty long).", Response.Status.BAD_REQUEST),
     MissingParamAuthor("Missing author.", Response.Status.BAD_REQUEST),
     MissingParamTitle("Missing title.", Response.Status.BAD_REQUEST),
-    MissingParamIsbn("Missing isbn.", Response.Status.BAD_REQUEST),
-    BookWithIsbnExistsAlready("Book with given isbn already exists, i don´t know what to do?!.", Response.Status.BAD_REQUEST),
+    MissingParamIsbn("Missing ISBN.", Response.Status.BAD_REQUEST),
+    BookWithIsbnExistsAlready("Book with given ISBN already exists, i don´t know what to do?!.", Response.Status.BAD_REQUEST),
+    InvalidIsbn("Invalid ISBN found, length must be 13, ISBN separated with '-' is equals to non separated.",Response.Status.BAD_REQUEST),
     AllRight("Your request was correct. Like that!", Response.Status.OK);
 
     private final String message;

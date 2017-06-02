@@ -16,7 +16,8 @@ public class Book extends Medium {
 
     private final String author;
 
-    private final String isbn;
+    //no final possible jackson need to call the setter for this variable
+    private String isbn;
 
     /**
      * Creates new book with empty default values.
@@ -47,6 +48,12 @@ public class Book extends Medium {
      */
     public String getIsbn() {
         return isbn;
+    }
+
+    //Setter needed for Jackson, Jackson call this setter and isbn is saved as normed isbn without '-'
+    public void setIsbn()
+    {
+        this.isbn = isbn.replace("-","");
     }
 
     /**
