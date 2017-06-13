@@ -9,19 +9,25 @@ package edu.hm.fachklassen;
 * @Author Sebastian Heunke, heunke@hm.edu
 */
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+
 /**
  * Book Represenation of a medium.
  */
+@Entity
 public class Book extends Medium {
 
+    @Column(name = "AUTHOR")
     private final String author;
 
-    private final String isbn;
+    @Column(name = "ISBN")
+    private String isbn;
 
     /**
      * Creates new book with empty default values.
      */
-    private Book() {
+    public Book() {
         this("", "", "");
     }
 
@@ -49,6 +55,16 @@ public class Book extends Medium {
         return isbn;
     }
 
+    /**
+     * Set Unique isbn and remove "-" from isbn
+     * Setter used by Jackson, so you need to call the setter for own book objects in test
+     * @param isbn
+     */
+    public Book setIsbn(String isbn)
+    {
+        this.isbn = isbn.replace("-","");
+        return this;
+    }
     /**
      * Author of the book.
      * @return Author.

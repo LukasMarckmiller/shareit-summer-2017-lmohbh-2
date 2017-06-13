@@ -21,6 +21,7 @@ public class Disc extends Medium implements Serializable{
     private final String barcode;
     @Column(name = "DIRECTOR")
     private final String director;
+    @Column(name = "FSK")
     private final int fsk;
 
     /**

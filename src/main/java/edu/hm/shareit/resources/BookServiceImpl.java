@@ -1,6 +1,10 @@
 package edu.hm.shareit.resources;
 
 import edu.hm.fachklassen.Book;
+import edu.hm.persitence.HibernateUtils;
+import org.hibernate.HibernateException;
+import org.hibernate.Session;
+import org.hibernate.Transaction;
 
 import java.util.HashSet;
 import java.util.Optional;
@@ -33,6 +37,24 @@ public class BookServiceImpl implements BookService {
                 ? BookServiceResult.InvalidIsbn : BOOKS_SET.contains(getBook(book.getIsbn()))
                 ? BookServiceResult.BookWithIsbnExistsAlready : BookServiceResult.AllRight;
 
+        Transaction transaction = null;
+        Session currentSession = null;
+        try {
+            currentSession = HibernateUtils.getSessionFactory().openSession();
+            transaction = currentSession.beginTransaction();
+            currentSession.save(book);
+            transaction.commit();
+        }
+        catch (HibernateException e)
+        {
+            if (transaction != null)
+                transaction.rollback();
+            e.printStackTrace();
+        }
+        finally {
+            if (currentSession != null)
+                currentSession.close();
+        }
         if (bookServiceResult == BookServiceResult.AllRight) {
             BOOKS_SET.add(book);
         }
