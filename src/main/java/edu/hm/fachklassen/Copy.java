@@ -9,10 +9,12 @@ package edu.hm.fachklassen;
 * @Author Sebastian Heunke, heunke@hm.edu
 */
 
+import java.io.Serializable;
+
 /**
  * Representation of a copy of a medium.
  */
-public class Copy {
+public class Copy{
     private final Medium medium;
     private final String owner;
 

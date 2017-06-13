@@ -9,11 +9,17 @@ package edu.hm.fachklassen;
 * @Author Sebastian Heunke, heunke@hm.edu
 */
 
+import javax.persistence.*;
+import java.io.Serializable;
+
 /**
  * Disc Medium.
  */
-public class Disc extends Medium {
+@Entity
+public class Disc extends Medium implements Serializable{
+    @Column(name = "BARCODE")
     private final String barcode;
+    @Column(name = "DIRECTOR")
     private final String director;
     private final int fsk;
 

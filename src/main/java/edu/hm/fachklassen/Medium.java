@@ -9,11 +9,30 @@ package edu.hm.fachklassen;
 * @Author Sebastian Heunke, heunke@hm.edu
 */
 
+import javax.persistence.*;
+import java.io.Serializable;
+
 /**
  * Medium representation.
  */
-public abstract class Medium {
+@Entity
+@Inheritance(strategy = InheritanceType.JOINED)
+public abstract class Medium implements Serializable{
+
+    @Id
+    @GeneratedValue()
+    private long id;
+
+    @Column(name = "TITLE")
     private final String title;
+
+    /**
+     * Required by Hibernate
+     */
+    public Medium()
+    {
+        this("");
+    }
 
     /**
      * Creates new Medium with given Titel.
