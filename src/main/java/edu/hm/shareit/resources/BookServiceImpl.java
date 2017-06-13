@@ -29,7 +29,8 @@ public class BookServiceImpl implements BookService {
         BookServiceResult bookServiceResult = book.getAuthor().equals("")
                 ? BookServiceResult.MissingParamAuthor : book.getTitle().equals("")
                 ? BookServiceResult.MissingParamTitle : book.getIsbn().equals("")
-                ? BookServiceResult.MissingParamIsbn : BOOKS_SET.contains(getBook(book.getIsbn()))
+                ? BookServiceResult.MissingParamIsbn : book.getIsbn().length() != 13
+                ? BookServiceResult.InvalidIsbn : BOOKS_SET.contains(getBook(book.getIsbn()))
                 ? BookServiceResult.BookWithIsbnExistsAlready : BookServiceResult.AllRight;
 
         if (bookServiceResult == BookServiceResult.AllRight) {

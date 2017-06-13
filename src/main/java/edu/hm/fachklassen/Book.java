@@ -9,25 +9,19 @@ package edu.hm.fachklassen;
 * @Author Sebastian Heunke, heunke@hm.edu
 */
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Table;
-import java.io.Serializable;
-
 /**
  * Book Represenation of a medium.
  */
-@Entity
-public class Book extends Medium implements Serializable{
-@Column(name = "AUTHOR")
+public class Book extends Medium {
+
     private final String author;
-@Column(name = "ISBN")
+
     private final String isbn;
 
     /**
      * Creates new book with empty default values.
      */
-    public Book() {
+    private Book() {
         this("", "", "");
     }
 
