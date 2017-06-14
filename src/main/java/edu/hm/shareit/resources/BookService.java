@@ -5,7 +5,7 @@ import edu.hm.fachklassen.Book;
 /**
  * Datastructure for a book service.
  */
-interface BookService {
+public interface BookService {
     /**
      * Adds a new book to the structure.
      * @param book to be added

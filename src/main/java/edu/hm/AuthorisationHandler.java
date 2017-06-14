@@ -36,7 +36,7 @@ import java.net.URL;
 public class AuthorisationHandler extends HandlerWrapper {
 
     private static final String TOKEN_HEADER = "Authorization";
-    private static final String AUTH_SERVER = "authserverhm.herokuapp.com";
+    private static final String AUTH_SERVER = "localhost";
     private static final int AUTH_PORT = 8083;
     private static final int OK = 200;
     private static final int BAD_GATEWAY = 502;
@@ -96,8 +96,8 @@ public class AuthorisationHandler extends HandlerWrapper {
         JSONObject response = new JSONObject();
         response.put("Status", BAD_GATEWAY);
 
-        //URL authUrl = new URL("http://" + AUTH_SERVER + ":" + AUTH_PORT + "/auth/a4/token");
-        URL authUrl = new URL("http://" + AUTH_SERVER + "/auth/a4/token");
+        URL authUrl = new URL("http://" + AUTH_SERVER + ":" + AUTH_PORT + "/auth/a4/token");
+        //URL authUrl = new URL("http://" + AUTH_SERVER + "/auth/a4/token");
         try {
             HttpURLConnection authConnection = (HttpURLConnection) authUrl.openConnection();
             authConnection.setUseCaches(false);
