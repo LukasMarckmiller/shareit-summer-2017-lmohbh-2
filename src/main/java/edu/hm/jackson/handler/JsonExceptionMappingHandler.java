@@ -22,7 +22,7 @@ public class JsonExceptionMappingHandler implements ExceptionMapper<PropertyBind
 
         //modify Response and return.
         returnJsonObject.put("Status", Response.Status.BAD_REQUEST);
-        returnJsonObject.put("Message", "'"+e.getPropertyName()+"' is not a property. Use the following: "+e.getMessageSuffix()+"Hallo Lukas & Basti");
+        returnJsonObject.put("Message", "'"+e.getPropertyName()+"' is not a property. Use the following: "+e.getMessageSuffix());
         return Response.status(Response.Status.BAD_REQUEST).entity(returnJsonObject.toString()).build();
     }
 }
