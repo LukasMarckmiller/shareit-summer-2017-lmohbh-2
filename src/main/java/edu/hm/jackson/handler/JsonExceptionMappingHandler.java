@@ -6,6 +6,7 @@
 
 package edu.hm.jackson.handler;
 import com.fasterxml.jackson.databind.exc.PropertyBindingException;
+import com.google.common.net.MediaType;
 import org.json.JSONObject;
 
 import javax.ws.rs.core.Response;
@@ -14,13 +15,12 @@ import javax.ws.rs.ext.ExceptionMapper;
 public class JsonExceptionMappingHandler implements ExceptionMapper<PropertyBindingException> {
     @Override
     public Response toResponse(PropertyBindingException e) {
-
         //check for exception fields like an wrong mapping value
         final JSONObject returnJsonObject = new JSONObject();
 
         //modify Response and return.
         returnJsonObject.put("Status", Response.Status.BAD_REQUEST);
         returnJsonObject.put("Message", "'"+e.getPropertyName()+"' is not a property. Use the following: "+e.getMessageSuffix());
-        return Response.status(Response.Status.BAD_REQUEST).entity(returnJsonObject.toString()).build();
+        return Response.status(Response.Status.BAD_REQUEST).header("Content-Type","application/json;charset=UTF-8").entity(returnJsonObject.toString()).build();
     }
 }

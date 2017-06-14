@@ -28,7 +28,7 @@ public class JsonExceptionMappingHandlerTest {
                 post("/shareit/media/books").
 
         then().
-                contentType(ContentType.TEXT).
+                contentType(ContentType.JSON).
                 statusCode(400).
                 body(equalTo("{\"Status\":\"Bad Request\",\"Message\":\"'titel' is not a property. Use the following:  (3 known properties: \\\"title\\\", \\\"author\\\", \\\"isbn\\\"])\"}"));
     }
@@ -45,7 +45,7 @@ public class JsonExceptionMappingHandlerTest {
                 post("/shareit/media/books").
 
                 then().
-                contentType(ContentType.TEXT).
+                contentType(ContentType.JSON).
                 statusCode(400).
                 body(equalTo("{\"Status\":\"Bad Request\",\"Message\":\"'autor' is not a property. Use the following:  (3 known properties: \\\"title\\\", \\\"author\\\", \\\"isbn\\\"])\"}"));
     }
@@ -62,7 +62,7 @@ public class JsonExceptionMappingHandlerTest {
                 post("/shareit/media/books").
 
                 then().
-                contentType(ContentType.TEXT).
+                contentType(ContentType.JSON).
                 statusCode(400).
                 body(equalTo("{\"Status\":\"Bad Request\",\"Message\":\"'titel' is not a property. Use the following:  (3 known properties: \\\"title\\\", \\\"author\\\", \\\"isbn\\\"])\"}"));
     }
