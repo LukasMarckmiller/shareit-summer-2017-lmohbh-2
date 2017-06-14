@@ -2,6 +2,10 @@
 //No reason to java doc test methods
 package edu.hm.shareit.resources;
 
+import com.google.inject.AbstractModule;
+import com.google.inject.Guice;
+import com.google.inject.Inject;
+import com.google.inject.Injector;
 import edu.hm.fachklassen.Book;
 import org.junit.Assert;
 import org.junit.Before;
@@ -9,8 +13,7 @@ import org.junit.Test;
 
 import javax.ws.rs.core.Response;
 
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 /*
 *ShareIt
@@ -22,13 +25,26 @@ import static org.mockito.Mockito.when;
 */
 
 public class BookResourceTest {
-    private BookResource sut = new BookResource();
+
+    private final static Injector injector =
+            Guice.createInjector(new AbstractModule() {
+                @Override
+                protected void configure() {
+                    bind(BookService.class).toInstance(mock(BookService.class));
+                }
+            });
+
+
+    private BookResource sut;
+    @Inject
     private BookService serviceMock;
 
     @Before
     public void setUp() {
-        serviceMock = mock(BookService.class);
-        sut = new BookResource(serviceMock);
+
+        serviceMock = injector.getInstance(BookService.class);
+        reset(serviceMock);
+        sut = injector.getInstance(BookResource.class);
     }
 
     @Test
