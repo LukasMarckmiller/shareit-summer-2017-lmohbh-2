@@ -1,7 +1,6 @@
 package edu.hm.jackson.handler;
 
 import io.restassured.http.ContentType;
-import org.json.JSONObject;
 import org.junit.Test;
 
 import static io.restassured.RestAssured.given;
