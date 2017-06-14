@@ -3,6 +3,7 @@
  * Java 1.8.0_131, Linux x86_64 4.4.0-66-generic
  * Dell (Intel Core i7-5500U CPU @ 2.40GHz, 4 cores, 8000 MByte RAM)
  **/
+
 package edu.hm.jackson.handler;
 import com.fasterxml.jackson.databind.exc.PropertyBindingException;
 import org.json.JSONObject;
