@@ -1,5 +1,6 @@
 package edu.hm.shareit.resources;
 
+import javax.inject.Inject;
 import edu.hm.fachklassen.Book;
 import org.json.JSONObject;
 
@@ -23,23 +24,15 @@ import javax.ws.rs.core.Response;
 @Path("/media/books")
 public class BookResource {
 
-    private final BookService bookService;
+    @Inject private BookService bookService;
 
     /**
      * Default ctor with defaul BookService used.
      */
+
     public BookResource() {
-        this(new BookServiceImpl());
     }
 
-    /**
-     * Constructor to set other BookServices to be used.
-     * Mainly used to inject Mock objects.
-     * @param data service to be used
-     */
-    BookResource(BookService data) {
-        bookService = data;
-    }
 
     /**
      * Returns currently used bookService.
