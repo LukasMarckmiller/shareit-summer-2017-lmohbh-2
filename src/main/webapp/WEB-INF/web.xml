@@ -6,11 +6,6 @@
 	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
 	version="3.0">
 	<init-param>
-        <listener>
-            <listener-class>
-                edu.hm.ShareitServletContextListener
-            </listener-class>
-        </listener>
 		<param-name>javax.ws.rs.Application</param-name>
 		<param-value>edu.hm.ShareItApplication</param-value>
 	</init-param>
@@ -18,7 +13,6 @@
 	<welcome-file-list>
 		<welcome-file>index.html</welcome-file>
 	</welcome-file-list>
-
 
 	<servlet>
       <servlet-name>Jersey Web Application</servlet-name>
@@ -53,4 +47,9 @@
 		<servlet-name>Media Resource</servlet-name>
 		<url-pattern>/shareit/*</url-pattern>
 	</servlet-mapping>
+	<listener>
+		<listener-class>
+			edu.hm.ShareitServletContextListener
+		</listener-class>
+	</listener>
 </web-app>
