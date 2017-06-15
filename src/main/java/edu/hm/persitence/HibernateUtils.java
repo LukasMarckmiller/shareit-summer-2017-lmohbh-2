@@ -13,7 +13,13 @@ import org.hibernate.cfg.Configuration;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.function.Function;
 
+/**
+ * Database util controller.
+ * @version 2.0
+ * @author Lukas Marckmiller
+ */
 public class HibernateUtils {
 
     private static SessionFactory sessionFactory;
@@ -34,7 +40,6 @@ public class HibernateUtils {
     {
         Transaction transaction = null;
         Session currentSession = null;
-        Object returnValue = null;
         try {
             currentSession = HibernateUtils.getSessionFactory().openSession();
             transaction = currentSession.beginTransaction();
@@ -74,14 +79,15 @@ public class HibernateUtils {
         }
         return result;
     }
-    public static void doUpdate(String tableName,String filterColumn,Serializable key,Serializable newEntity) {
+    public static void doUpdate(String tableName, String filterColumn,Object key,Class entityClass, Function<Serializable,Serializable> modifyFoundEntry) {
         Transaction transaction = null;
         Session currentSession = null;
-        List result = null;
         try {
             currentSession = HibernateUtils.getSessionFactory().openSession();
             transaction = currentSession.beginTransaction();
-            currentSession.update(currentSession.get(newEntity.getClass(), key));
+            Serializable result = (Serializable) currentSession.createQuery("FROM " + tableName + " " + tableName.charAt(0) + " WHERE " + tableName.charAt(0) + "." + filterColumn + " = '" + key + '\'').uniqueResult();
+            currentSession.update(modifyFoundEntry.apply(result));
+            transaction.commit();
         } catch (HibernateException e) {
             if (transaction != null)
                 transaction.rollback();

@@ -13,13 +13,13 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 
 /**
- * Book Represenation of a medium.
+ * Book Represenation of a medium. NO LONGER IMMUTABLE. DATABASE STORES OBJECT, NEED TO MANIPULATE THEM FOR A UPDATE OTHER WAY IS DELETE OLD AND INSERT UPDATED ENTRY
  */
 @Entity
 public class Book extends Medium {
 
     @Column(name = "AUTHOR")
-    private final String author;
+    private String author;
 
     @Column(name = "ISBN")
     private String isbn;
@@ -46,7 +46,6 @@ public class Book extends Medium {
         this.isbn = isbn;
     }
 
-
     /**
      * Unique isbn for this book.
      * @return Isbn number.
@@ -72,7 +71,11 @@ public class Book extends Medium {
     public String getAuthor() {
         return author;
     }
-
+    public Book setAuthor(String author)
+    {
+        this.author = author;
+        return this;
+    }
     @Override
     public String toString() {
         return "[" + getAuthor() + ": " + getTitle() + " (" + getIsbn() + ")]";

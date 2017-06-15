@@ -2,13 +2,9 @@ package edu.hm.shareit.resources;
 
 import edu.hm.fachklassen.Book;
 import edu.hm.persitence.HibernateUtils;
-import org.hibernate.HibernateException;
-import org.hibernate.Session;
-import org.hibernate.Transaction;
 
 import java.util.HashSet;
 import java.util.List;
-import java.util.Optional;
 
 /**
  * Defines Service routine for Book Objects and stores them
@@ -18,9 +14,11 @@ import java.util.Optional;
  * @version 1.1
  */
 public class BookServiceImpl implements BookService {
+    public static final String BOOK = "Book";
     //has to be static because Jetty creates a new BookResource Object for each request
     //so we need a static and persistent container
     static final HashSet<Book> BOOKS_SET = new HashSet<>();
+    public static final String ISBN = "isbn";
 
     /**
      * Add book do data structure.
@@ -35,7 +33,7 @@ public class BookServiceImpl implements BookService {
                 ? BookServiceResult.MissingParamAuthor : book.getTitle().equals("")
                 ? BookServiceResult.MissingParamTitle : book.getIsbn().equals("")
                 ? BookServiceResult.MissingParamIsbn : book.getIsbn().length() != 13
-                ? BookServiceResult.InvalidIsbn : (!HibernateUtils.doSelectWhere("Book","isbn",book.getIsbn()).isEmpty())
+                ? BookServiceResult.InvalidIsbn : (!HibernateUtils.doSelectWhere(BOOK, ISBN,book.getIsbn()).isEmpty())
                 ? BookServiceResult.BookWithIsbnExistsAlready : BookServiceResult.AllRight;
 
         if (bookServiceResult == BookServiceResult.AllRight) {
@@ -47,20 +45,21 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public Book[] getBooks() {
-        return ((List<Book>)HibernateUtils.doSelectWhere("Book",null,null)).toArray(new Book[]{});
+        return ((List<Book>)HibernateUtils.doSelectWhere(BOOK,null,null)).toArray(new Book[]{});
     }
 
     @Override
     public Book getBook(String isbn) {
         //Set doesnt contain dublicates so findFirst always returns null or the proper object
-        List<Book> result = HibernateUtils.doSelectWhere("Book","isbn",isbn);
+        List<Book> result = HibernateUtils.doSelectWhere(BOOK, ISBN,isbn);
         return result.stream().findFirst().orElse(null);
     }
 
     @Override
     public BookServiceResult updateBook(Book book) {
-        if (!HibernateUtils.doSelectWhere("Book","isbn",book.getIsbn()).isEmpty()) {
-            HibernateUtils.doUpdate("Book","isbn",book.getIsbn(),book);
+        if (!HibernateUtils.doSelectWhere(BOOK, ISBN,book.getIsbn()).isEmpty()) {
+            HibernateUtils.doUpdate(BOOK, ISBN,book.getIsbn(),Book.class,(foundBook) ->
+                    ((Book)foundBook).setAuthor(book.getAuthor()).setIsbn(book.getIsbn()).setTitle(book.getTitle()));
         } else {
             return BookServiceResult.NoBookWithIsbnFound;
         }

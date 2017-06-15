@@ -23,8 +23,12 @@ public abstract class Medium implements Serializable{
     @GeneratedValue()
     private long id;
 
+    public void setId(long id) {
+        this.id = id;
+    }
+
     @Column(name = "TITLE")
-    private final String title;
+    private String title;
 
     /**
      * Required by Hibernate
@@ -53,6 +57,11 @@ public abstract class Medium implements Serializable{
      */
     public String getTitle() {
         return title;
+    }
+
+    public Medium setTitle(String title) {
+        this.title = title;
+        return this;
     }
 
     @Override
