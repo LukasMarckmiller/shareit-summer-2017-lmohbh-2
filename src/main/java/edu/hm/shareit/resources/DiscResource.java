@@ -1,5 +1,6 @@
 package edu.hm.shareit.resources;
 
+import javax.inject.Inject;
 import edu.hm.fachklassen.Disc;
 
 import javax.ws.rs.*;
@@ -11,22 +12,14 @@ import javax.ws.rs.core.Response;
  */
 @Path("/media/discs")
 public class DiscResource {
-    private final DiscService discService;
+     @Inject private DiscService discService;
 
     /**
      * Creates a new DiskResource to handle requests.
      */
     public DiscResource() {
-        this(new DiscServiceImpl());
     }
 
-    /**
-     * Ctor with added parameters to change background service used.
-     * @param service to be used instead of the default.
-     */
-    DiscResource(DiscService service) {
-        discService = service;
-    }
 
     /**
      * Rest request creating a new Disc in the service.

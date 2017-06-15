@@ -27,9 +27,9 @@ public class JettyStarter {
     public static void main(String... args) throws Exception {
         Server jetty = new Server(PORT);
         Handler handler = new WebAppContext(WEBAPP_DIR, APP_URL);
-        HandlerWrapper auth = new AuthorisationHandler();
-        auth.setHandler(handler);
-        jetty.setHandler(auth);
+        //HandlerWrapper auth = new AuthorisationHandler();
+        //auth.setHandler(handler);
+        jetty.setHandler(handler);
         jetty.start();
         System.out.println("Jetty listening on port " + PORT);
         jetty.join();

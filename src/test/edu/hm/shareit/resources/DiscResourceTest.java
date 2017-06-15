@@ -2,6 +2,9 @@
 //No reason to java doc test methods
 package edu.hm.shareit.resources;
 
+import com.google.inject.AbstractModule;
+import com.google.inject.Guice;
+import com.google.inject.Injector;
 import edu.hm.fachklassen.Disc;
 import org.junit.Assert;
 import org.junit.Before;
@@ -10,6 +13,7 @@ import org.junit.Test;
 import javax.ws.rs.core.Response;
 
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.reset;
 import static org.mockito.Mockito.when;
 
 /*
@@ -22,13 +26,22 @@ import static org.mockito.Mockito.when;
 */
 
 public class DiscResourceTest {
-    private DiscResource sut = new DiscResource();
+    private final static Injector injector =
+            Guice.createInjector(new AbstractModule() {
+                @Override
+                protected void configure() {
+                    bind(DiscService.class).toInstance(mock(DiscService.class));
+                }
+            });
+
+    private DiscResource sut;
     private DiscService serviceMock;
 
     @Before
     public void setUp() {
-        serviceMock = mock(DiscService.class);
-        sut = new DiscResource(serviceMock);
+        serviceMock = injector.getInstance(DiscService.class);
+        reset(serviceMock);
+        sut = injector.getInstance(DiscResource.class);
     }
 
     @Test
