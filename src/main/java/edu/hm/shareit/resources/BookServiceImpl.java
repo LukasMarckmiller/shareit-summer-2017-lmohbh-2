@@ -7,6 +7,7 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -34,28 +35,11 @@ public class BookServiceImpl implements BookService {
                 ? BookServiceResult.MissingParamAuthor : book.getTitle().equals("")
                 ? BookServiceResult.MissingParamTitle : book.getIsbn().equals("")
                 ? BookServiceResult.MissingParamIsbn : book.getIsbn().length() != 13
-                ? BookServiceResult.InvalidIsbn : BOOKS_SET.contains(getBook(book.getIsbn()))
+                ? BookServiceResult.InvalidIsbn : (!HibernateUtils.doSelectWhere("Book","isbn",book.getIsbn()).isEmpty())
                 ? BookServiceResult.BookWithIsbnExistsAlready : BookServiceResult.AllRight;
 
-        Transaction transaction = null;
-        Session currentSession = null;
-        try {
-            currentSession = HibernateUtils.getSessionFactory().openSession();
-            transaction = currentSession.beginTransaction();
-            currentSession.save(book);
-            transaction.commit();
-        }
-        catch (HibernateException e)
-        {
-            if (transaction != null)
-                transaction.rollback();
-            e.printStackTrace();
-        }
-        finally {
-            if (currentSession != null)
-                currentSession.close();
-        }
         if (bookServiceResult == BookServiceResult.AllRight) {
+            HibernateUtils.doInsert(book);
             BOOKS_SET.add(book);
         }
         return bookServiceResult;
@@ -63,20 +47,20 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public Book[] getBooks() {
-        return BOOKS_SET.toArray(new Book[]{});
+        return ((List<Book>)HibernateUtils.doSelectWhere("Book",null,null)).toArray(new Book[]{});
     }
 
     @Override
     public Book getBook(String isbn) {
         //Set doesnt contain dublicates so findFirst always returns null or the proper object
-        Optional<Book> possibleBook = BOOKS_SET.stream().filter(b -> b.getIsbn().equals(isbn)).findFirst();
-        return possibleBook.orElse(null);
+        List<Book> result = HibernateUtils.doSelectWhere("Book","isbn",isbn);
+        return result.stream().findFirst().orElse(null);
     }
 
     @Override
     public BookServiceResult updateBook(Book book) {
-        if (BOOKS_SET.remove(getBook(book.getIsbn()))) {
-            BOOKS_SET.add(book);
+        if (!HibernateUtils.doSelectWhere("Book","isbn",book.getIsbn()).isEmpty()) {
+            HibernateUtils.doUpdate("Book","isbn",book.getIsbn(),book);
         } else {
             return BookServiceResult.NoBookWithIsbnFound;
         }
